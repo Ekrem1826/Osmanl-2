@@ -1236,19 +1236,69 @@
         display: none;
       }
 
+      body.title-banner-closed #openworld-hud {
+        display: none;
+      }
+      #openworld-hud.panel-closed {
+        display: none;
+      }
+
       @media (max-width: 1100px) {
         #quick-view-bar {
-          top: auto;
-          bottom: 295px;
-          left: 16px;
-          right: 16px;
+          top: 10px;
+          left: 58px;
+          right: 105px;
         }
-        body.dock-is-collapsed #quick-view-bar {
-          bottom: 95px;
+        body.title-banner-closed #quick-view-bar {
+          left: 58px;
+        }
+        body.minimap-closed #quick-view-bar {
+          right: 98px;
         }
       }
 
       @media (max-width: 768px) {
+        #quick-view-bar {
+          top: 8px;
+          left: 52px;
+          right: 88px;
+        }
+        .quick-bar-inner {
+          padding: 4px 6px;
+          gap: 4px;
+        }
+        .qview-btn {
+          min-height: 30px;
+          padding: 4px 7px;
+          font-size: 0.68rem;
+        }
+        #joystick-container {
+          bottom: 54px;
+          left: 12px;
+          gap: 10px;
+        }
+        #joystick-base {
+          width: 88px;
+          height: 88px;
+        }
+        #joystick-knob {
+          width: 36px;
+          height: 36px;
+        }
+        .touch-mini-btn {
+          min-width: 36px;
+          min-height: 34px;
+          padding: 3px 6px;
+          font-size: 0.7rem;
+        }
+        #dock-toggle-title-btn,
+        #dock-toggle-minimap-btn,
+        #dock-clean-screen-btn {
+          display: none;
+        }
+        #proximity-prompts {
+          bottom: 152px !important;
+        }
         #minimap-card {
           width: 152px;
           padding: 7px;
@@ -1328,16 +1378,24 @@
       👁 Yazıları Göster [T]
     </button>
 
-    <!-- Top-Center Quick View Mode & Clean Screen Switcher -->
+    <!-- Top-Center Quick View Mode & Clean Screen Switcher (Compact & Mobile-Friendly) -->
     <nav id="quick-view-bar" aria-label="Hızlı Bakış Açısı ve Yazı Gizleme Seçenekleri">
       <div class="quick-bar-inner">
         <button
           type="button"
           class="qview-btn active"
           data-quickcam="orbit"
-          title="Serbest 3B Yörünge Kamerası (İnsan olmadan)"
+          title="Yörünge Kamerası"
         >
           🌐 Yörünge
+        </button>
+        <button
+          type="button"
+          class="qview-btn"
+          data-quickcam="fly"
+          title="Dokunmatik / Serbest Kamera ile Gez"
+        >
+          🕊 Serbest
         </button>
         <button
           type="button"
@@ -1350,18 +1408,10 @@
         <button
           type="button"
           class="qview-btn"
-          data-quickcam="fly"
-          title="Havada Serbest Uçuş Kamerası"
-        >
-          🕊 Serbest Uçuş
-        </button>
-        <button
-          type="button"
-          class="qview-btn"
           data-quickcam="third"
           title="Sokaklarda İnsan Karakteri Olarak Gez (3. Şahıs)"
         >
-          🚶 İnsan Olarak Gez
+          🚶 İnsan
         </button>
         <button
           type="button"
@@ -1369,15 +1419,15 @@
           data-quickcam="walk"
           title="Sokaklarda 1. Şahıs Göz Hizasından Gez"
         >
-          👁 Göz Hizası
+          👁 Göz
         </button>
         <button
           type="button"
           id="quick-toggle-labels-btn"
-          class="qview-btn"
+          class="qview-btn active"
           title="Harita Üzerindeki Yapı ve Mahalle Yazılarını Aç/Kapat (L)"
         >
-          🏷 Harita Yazıları: Açık
+          🏷 İsimler: Kapalı
         </button>
         <button
           type="button"
@@ -1385,7 +1435,7 @@
           class="qview-btn clean-trigger"
           title="Ekrandaki Tüm Yazıları ve Panelleri Kaldır (T)"
         >
-          🧹 Tüm Yazıları Kaldır [T]
+          🧹 Tam Ekran [T]
         </button>
       </div>
     </nav>
@@ -1428,8 +1478,19 @@
     <!-- Open-World Quest & Character Tracker HUD -->
     <aside id="openworld-hud" aria-label="Açık Dünya Görev ve Gezgin Durumu">
       <div class="ow-hud-header">
-        <span>⚔ Tarihî Yaşam ve Görevler</span>
-        <span id="quest-progress-count">0 / 5 Tamamlandı</span>
+        <span>⚔ Tarihî Görevler</span>
+        <div style="display: flex; align-items: center; gap: 6px">
+          <span id="quest-progress-count">0 / 5 Tamamlandı</span>
+          <button
+            type="button"
+            id="close-quest-hud-btn"
+            style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; padding: 0 4px"
+            title="Görev Kutusunu Gizle"
+            aria-label="Görev kutusunu gizle"
+          >
+            ✕
+          </button>
+        </div>
       </div>
       <div class="ow-quest-box">
         <div class="ow-quest-title">
@@ -1554,6 +1615,9 @@
           <button type="button" id="cam-rot-right-btn" class="touch-mini-btn" title="Kamerayı Sağa Döndür">
             Sağ ⟳
           </button>
+          <button type="button" id="cam-up-btn" class="touch-mini-btn" title="Yukarı Yüksel">
+            ▲ Yüksel
+          </button>
         </div>
         <div class="touch-cam-row">
           <button type="button" id="cam-zoom-in-btn" class="touch-mini-btn" title="Yakınlaştır">
@@ -1562,8 +1626,11 @@
           <button type="button" id="cam-zoom-out-btn" class="touch-mini-btn" title="Uzaklaştır">
             － Uzak
           </button>
-          <button type="button" id="player-sprint-btn" class="touch-mini-btn" title="Koşma Modu">
-            🏃 Koş
+          <button type="button" id="cam-down-btn" class="touch-mini-btn" title="Aşağı Alçal">
+            ▼ Alçal
+          </button>
+          <button type="button" id="player-sprint-btn" class="touch-mini-btn" title="Hızlı Gez / Koş">
+            🏃 Hızlı
           </button>
         </div>
       </div>
@@ -1829,11 +1896,11 @@
                   <span>İnsanlar</span>
                 </label>
                 <label class="layer-toggle">
-                  <input type="checkbox" data-layer="etiketler" checked />
+                  <input type="checkbox" data-layer="etiketler" />
                   <span>Etiketler</span>
                 </label>
                 <label class="layer-toggle">
-                  <input type="checkbox" data-layer="mahalleAdlari" checked />
+                  <input type="checkbox" data-layer="mahalleAdlari" />
                   <span>Mahalle Adları</span>
                 </label>
               </div>
@@ -2482,8 +2549,8 @@
           mahalle: true,
           gemiler: true,
           insanlar: true,
-          etiketler: true,
-          mahalleAdlari: true,
+          etiketler: false,
+          mahalleAdlari: false,
         },
       };
 
@@ -3248,7 +3315,7 @@
         }
 
         // -------------------------------------------------------------------------
-        // 2. AYASOFYA-İ KEBÎR CAMİİ VE AYA İRİNİ (c. 1557 - 3 Minarets Only!)
+        // 2. AYASOFYA-İ KEBÎR CAMİİ VE AYA İRİNİ (High-Realism 15th/16th Century Form)
         // -------------------------------------------------------------------------
         {
           const ayaGroup = new THREE.Group();
@@ -3257,88 +3324,159 @@
           const ly = getPeninsulaElevation(lx, lz);
           ayaGroup.position.set(lx, ly, lz);
 
-          // Main Basilica Body (Salmon-terracotta Byzantine plaster & brick)
+          // Main Basilica Nave & Side Aisles (Terracotta-rose Byzantine plaster & stone courses)
           const body = new THREE.Mesh(sharedGeos.box, materials.ayahagiaPlaster);
-          body.scale.set(28, 15.5, 24);
-          body.position.set(0, 7.75, 0);
+          body.scale.set(29, 15.8, 25);
+          body.position.set(0, 7.9, 0);
           body.castShadow = true;
           body.receiveShadow = true;
           ayaGroup.add(body);
 
-          // Narthex & Exonarthex (west)
-          const narthex = new THREE.Mesh(sharedGeos.box, materials.byzantineWall);
-          narthex.scale.set(6, 11, 25);
-          narthex.position.set(-16, 5.5, 0);
-          ayaGroup.add(narthex);
+          // Upper Gallery Cornice & Stone Belt
+          const cornice = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          cornice.scale.set(29.8, 0.75, 25.8);
+          cornice.position.set(0, 15.6, 0);
+          ayaGroup.add(cornice);
 
-          // Massive 40-ribbed Drum & Flatten-profiled Byzantine Central Dome
-          const drum = new THREE.Mesh(sharedGeos.cylinder, materials.ayahagiaPlaster);
-          drum.scale.set(10.8, 3.6, 10.8);
-          drum.position.set(0, 16.2, 0);
-          ayaGroup.add(drum);
+          // Inner & Outer Narthex (West Entrance Facade with Imperial Portal)
+          const innerNarthex = new THREE.Mesh(sharedGeos.box, materials.byzantineWall);
+          innerNarthex.scale.set(5.2, 12.2, 25.6);
+          innerNarthex.position.set(-16.2, 6.1, 0);
+          ayaGroup.add(innerNarthex);
 
-          const mainDome = createDomeWithFinial(10.8, 0.68, materials.leadDome);
-          mainDome.position.set(0, 17.6, 0);
-          ayaGroup.add(mainDome);
+          const exoNarthex = new THREE.Mesh(sharedGeos.box, materials.ayahagiaPlaster);
+          exoNarthex.scale.set(3.8, 8.8, 26.2);
+          exoNarthex.position.set(-20.2, 4.4, 0);
+          ayaGroup.add(exoNarthex);
 
-          // East and West Great Semi-Domes
-          [-10.2, 10.2].forEach((dx) => {
-            const sd = createDomeWithFinial(7.8, 0.72, materials.leadDome);
-            sd.position.set(dx, 13.8, 0);
-            ayaGroup.add(sd);
+          // Eastern Apse (Mihrab Projection)
+          const apse = new THREE.Mesh(sharedGeos.cylinder, materials.ayahagiaPlaster);
+          apse.scale.set(5.2, 12.5, 4.6);
+          apse.position.set(15.2, 6.25, 0);
+          ayaGroup.add(apse);
+
+          // North & South Tympanum Walls with Arched Window Rows
+          [-12.6, 12.6].forEach((tz) => {
+            for (let wx = -6; wx <= 6; wx += 3) {
+              const win = new THREE.Mesh(sharedGeos.box, materials.windowDark);
+              win.scale.set(1.4, 2.6, 0.35);
+              win.position.set(wx, 12.8, tz);
+              ayaGroup.add(win);
+            }
           });
 
-          // Early Byzantine Buttresses (North & South)
-          [-13, 13].forEach((dz) => {
-            [-6, 6].forEach((dx) => {
-              const buttress = new THREE.Mesh(sharedGeos.box, materials.ayahagiaPlaster);
-              buttress.scale.set(3.5, 13.5, 4.2);
-              buttress.position.set(dx, 6.75, dz);
-              ayaGroup.add(buttress);
+          // Massive 40-Ribbed Drum & Flattened Byzantine Central Dome with 24 Radial Buttress Ribs
+          const drum = new THREE.Mesh(sharedGeos.cylinder, materials.ayahagiaPlaster);
+          drum.scale.set(11.0, 3.8, 11.0);
+          drum.position.set(0, 16.4, 0);
+          ayaGroup.add(drum);
+
+          for (let r = 0; r < 24; r++) {
+            const ang = (r / 24) * Math.PI * 2;
+            const rib = new THREE.Mesh(sharedGeos.box, materials.warmStone);
+            rib.scale.set(0.65, 3.4, 1.35);
+            rib.position.set(Math.cos(ang) * 11.1, 16.5, Math.sin(ang) * 11.1);
+            rib.rotation.y = -ang;
+            ayaGroup.add(rib);
+          }
+
+          const mainDome = createDomeWithFinial(11.0, 0.68, materials.leadDome);
+          mainDome.position.set(0, 17.9, 0);
+          ayaGroup.add(mainDome);
+
+          // East and West Great Semi-Domes + 4 Corner Exedra Semi-Domes
+          [-10.4, 10.4].forEach((dx) => {
+            const sd = createDomeWithFinial(8.0, 0.72, materials.leadDome);
+            sd.position.set(dx, 14.0, 0);
+            ayaGroup.add(sd);
+            [-5.8, 5.8].forEach((dz) => {
+              const exedra = createDomeWithFinial(3.8, 0.75, materials.leadDome);
+              exedra.position.set(dx * 1.12, 11.8, dz);
+              ayaGroup.add(exedra);
             });
           });
 
-          // ONLY the minarets existing in 1557–1560 (Mehmed II brick SE minaret + Bayezid II NE minaret)
-          const mehmedMinaret = createOttomanMinaret(29, 1.05, 1, materials.ayahagiaPlaster);
-          mehmedMinaret.position.set(14.5, 0, 12.5);
+          // Monumental Stepped Buttress Piers (North & South Facades)
+          [-14.2, 14.2].forEach((dz) => {
+            [-7.5, -2.5, 2.5, 7.5].forEach((dx) => {
+              const buttressLower = new THREE.Mesh(sharedGeos.box, materials.ayahagiaPlaster);
+              buttressLower.scale.set(2.8, 9.5, 4.8);
+              buttressLower.position.set(dx, 4.75, dz);
+              ayaGroup.add(buttressLower);
+
+              const buttressUpper = new THREE.Mesh(sharedGeos.box, materials.warmStone);
+              buttressUpper.scale.set(2.2, 5.5, 3.2);
+              buttressUpper.position.set(dx, 12.0, dz * 0.92);
+              ayaGroup.add(buttressUpper);
+            });
+          });
+
+          // ONLY the minarets existing up to 1557–1560 (Mehmed II red-brick SE minaret + Bayezid II NE minaret + SW minaret)
+          const mehmedMinaret = createOttomanMinaret(30, 1.08, 1, materials.ayahagiaPlaster);
+          mehmedMinaret.position.set(15.2, 0, 13.0);
           ayaGroup.add(mehmedMinaret);
 
-          const bayezidMinaret = createOttomanMinaret(31, 1.05, 1, materials.limestone);
-          bayezidMinaret.position.set(14.5, 0, -12.5);
+          const bayezidMinaret = createOttomanMinaret(32, 1.05, 1, materials.limestone);
+          bayezidMinaret.position.set(15.2, 0, -13.0);
           ayaGroup.add(bayezidMinaret);
 
-          const swEarlyMinaret = createOttomanMinaret(28, 1.0, 1, materials.limestone);
-          swEarlyMinaret.position.set(-15.5, 0, 12.5);
+          const swEarlyMinaret = createOttomanMinaret(29, 1.0, 1, materials.limestone);
+          swEarlyMinaret.position.set(-16.2, 0, 13.0);
           ayaGroup.add(swEarlyMinaret);
 
-          // Fatih Medresesi adjacent to Hagia Sophia
-          const medrese = new THREE.Mesh(sharedGeos.box, materials.limestone);
-          medrese.scale.set(14, 5, 10);
-          medrese.position.set(-8, 2.5, -19);
-          ayaGroup.add(medrese);
+          // Courtyard Şadırvan (Ablution Fountain) & Fatih Medresesi
+          const sadirvan = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
+          sadirvan.scale.set(2.8, 2.6, 2.8);
+          sadirvan.position.set(-25.5, 1.3, 0);
+          ayaGroup.add(sadirvan);
+          const sadirvanRoof = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
+          sadirvanRoof.scale.set(3.4, 2.2, 3.4);
+          sadirvanRoof.position.set(-25.5, 3.7, 0);
+          ayaGroup.add(sadirvanRoof);
 
-          // AYA İRİNİ (Hagia Irene) just north in First Courtyard of Palace
+          const medrese = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          medrese.scale.set(16, 5.2, 10.5);
+          medrese.position.set(-6, 2.6, -20.5);
+          ayaGroup.add(medrese);
+          for (let mdx = -11; mdx <= -1; mdx += 3.3) {
+            const md = createDomeWithFinial(1.5, 0.85, materials.leadDome);
+            md.position.set(mdx, 5.2, -20.5);
+            ayaGroup.add(md);
+          }
+
+          // AYA İRİNİ (Hagia Irene - Cebehane-i Âmire) in First Courtyard of Palace
           const irini = new THREE.Group();
-          irini.position.set(18, -1.5, -28);
+          irini.position.set(18, -1.2, -29);
           const iriniBody = new THREE.Mesh(sharedGeos.box, materials.byzantineWall);
-          iriniBody.scale.set(16, 9.5, 11);
-          iriniBody.position.y = 4.75;
+          iriniBody.scale.set(17.5, 9.8, 11.8);
+          iriniBody.position.y = 4.9;
           irini.add(iriniBody);
+          const iriniAtrium = new THREE.Mesh(sharedGeos.box, materials.ayahagiaPlaster);
+          iriniAtrium.scale.set(7.5, 6.2, 11.2);
+          iriniAtrium.position.set(-11.5, 3.1, 0);
+          irini.add(iriniAtrium);
+          const iriniApse = new THREE.Mesh(sharedGeos.cylinder, materials.byzantineWall);
+          iriniApse.scale.set(3.6, 8.2, 3.6);
+          iriniApse.position.set(9.2, 4.1, 0);
+          irini.add(iriniApse);
           const iriniDrum = new THREE.Mesh(sharedGeos.cylinder, materials.byzantineWall);
-          iriniDrum.scale.set(4.6, 3.0, 4.6);
-          iriniDrum.position.set(2, 10.2, 0);
+          iriniDrum.scale.set(4.8, 3.4, 4.8);
+          iriniDrum.position.set(2.2, 10.6, 0);
           irini.add(iriniDrum);
-          const iriniDome = createDomeWithFinial(4.6, 0.72, materials.leadDome);
-          iriniDome.position.set(2, 11.4, 0);
+          const iriniDome = createDomeWithFinial(4.8, 0.74, materials.leadDome);
+          iriniDome.position.set(2.2, 12.0, 0);
           irini.add(iriniDome);
+          const iriniWestDome = createDomeWithFinial(3.6, 0.65, materials.leadDome);
+          iriniWestDome.position.set(-4.5, 9.8, 0);
+          irini.add(iriniWestDome);
           ayaGroup.add(irini);
 
-          registerLandmarkHitbox(ayaGroup, 'ayasofya', 26, 32);
+          registerLandmarkHitbox(ayaGroup, 'ayasofya', 28, 34);
           layerGroups.camiler.add(ayaGroup);
         }
 
         // -------------------------------------------------------------------------
-        // 3. TOPKAPI SARAYI (Saray-ı Cedîd-i Âmire) at Sarayburnu
+        // 3. TOPKAPI SARAYI (Saray-ı Cedîd-i Âmire) at Sarayburnu — Architectural Masterpiece
         // -------------------------------------------------------------------------
         {
           const topkapiGroup = new THREE.Group();
@@ -3347,110 +3485,297 @@
           const ly = getPeninsulaElevation(lx, lz);
           topkapiGroup.position.set(lx, ly, lz);
 
-          // Bâb-ı Hümâyûn (Imperial Gate)
-          const babHumayun = new THREE.Mesh(sharedGeos.box, materials.limestone);
-          babHumayun.scale.set(8, 9.5, 5);
-          babHumayun.position.set(-34, 4.75, 22);
-          topkapiGroup.add(babHumayun);
+          // Stone Terrace Plinth leveling the Sarayburnu acropolis plateau
+          const sarayTerrace = new THREE.Mesh(sharedGeos.box, materials.warmStone);
+          sarayTerrace.scale.set(76, 4.2, 68);
+          sarayTerrace.position.set(1, -1.9, -1);
+          sarayTerrace.receiveShadow = true;
+          topkapiGroup.add(sarayTerrace);
 
-          // Bâbüsselâm (Orta Kapı) with Twin Octagonal Conical Towers
-          const ortaKapi = new THREE.Mesh(sharedGeos.box, materials.limestone);
-          ortaKapi.scale.set(5, 8, 12);
-          ortaKapi.position.set(-16, 4, 6);
-          topkapiGroup.add(ortaKapi);
-          [-6.5, 6.5].forEach((dz) => {
+          // --- I. BÂB-I HÜMÂYÛN (Imperial Gate, 1478 Fatih Sultan Mehmed) ---
+          const babHumayunGroup = new THREE.Group();
+          babHumayunGroup.position.set(-34, 0, 22);
+          const bhLeftWing = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          bhLeftWing.scale.set(5.6, 10.2, 4.8);
+          bhLeftWing.position.set(0, 5.1, -4.4);
+          babHumayunGroup.add(bhLeftWing);
+          const bhRightWing = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          bhRightWing.scale.set(5.6, 10.2, 4.8);
+          bhRightWing.position.set(0, 5.1, 4.4);
+          babHumayunGroup.add(bhRightWing);
+          const bhUpperBridge = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          bhUpperBridge.scale.set(5.8, 4.4, 4.6);
+          bhUpperBridge.position.set(0, 8.0, 0);
+          babHumayunGroup.add(bhUpperBridge);
+          // Deep Dark Archway Recess & Golden Imperial Tuğra / Kitâbe Plaque
+          const bhArchVoid = new THREE.Mesh(sharedGeos.box, materials.windowDark);
+          bhArchVoid.scale.set(5.9, 5.8, 3.6);
+          bhArchVoid.position.set(0, 2.9, 0);
+          babHumayunGroup.add(bhArchVoid);
+          const bhKitabe = new THREE.Mesh(sharedGeos.box, materials.goldFinial);
+          bhKitabe.scale.set(0.35, 1.4, 3.2);
+          bhKitabe.position.set(-2.95, 7.2, 0);
+          babHumayunGroup.add(bhKitabe);
+          const bhDome = createDomeWithFinial(2.4, 0.8, materials.leadDome);
+          bhDome.position.set(0, 10.2, 0);
+          babHumayunGroup.add(bhDome);
+          topkapiGroup.add(babHumayunGroup);
+
+          // --- FIRST COURTYARD (Alay Meydanı) Processional Road & Darphane-i Âmire ---
+          const alayRoad = new THREE.Mesh(sharedGeos.box, materials.warmStone);
+          alayRoad.scale.set(22, 0.3, 5.5);
+          alayRoad.position.set(-25, 0.15, 14);
+          alayRoad.rotation.y = 0.58;
+          topkapiGroup.add(alayRoad);
+
+          const darphane = new THREE.Mesh(sharedGeos.box, materials.byzantineWall);
+          darphane.scale.set(14, 5.2, 8.5);
+          darphane.position.set(-25, 2.6, -8);
+          topkapiGroup.add(darphane);
+
+          // --- II. BÂBÜSSELÂM (Orta Kapı) with Twin Octagonal Crenellated Towers ---
+          const ortaKapiGroup = new THREE.Group();
+          ortaKapiGroup.position.set(-16, 0, 6);
+          const okCenter = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          okCenter.scale.set(5.4, 8.8, 11.5);
+          okCenter.position.set(0, 4.4, 0);
+          ortaKapiGroup.add(okCenter);
+          const okPortal = new THREE.Mesh(sharedGeos.box, materials.windowDark);
+          okPortal.scale.set(5.6, 5.4, 3.4);
+          okPortal.position.set(0, 2.7, 0);
+          ortaKapiGroup.add(okPortal);
+          const okKitabe = new THREE.Mesh(sharedGeos.box, materials.goldFinial);
+          okKitabe.scale.set(0.3, 1.1, 3.0);
+          okKitabe.position.set(-2.75, 6.6, 0);
+          ortaKapiGroup.add(okKitabe);
+
+          [-6.8, 6.8].forEach((dz) => {
             const tower = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
-            tower.scale.set(2.4, 13, 2.4);
-            tower.position.set(-16, 6.5, 6 + dz);
-            topkapiGroup.add(tower);
+            tower.scale.set(2.8, 14.5, 2.8);
+            tower.position.set(0, 7.25, dz);
+            tower.castShadow = true;
+            ortaKapiGroup.add(tower);
+            const galleryCorbel = new THREE.Mesh(sharedGeos.cylinder, materials.warmStone);
+            galleryCorbel.scale.set(3.15, 1.4, 3.15);
+            galleryCorbel.position.set(0, 14.2, dz);
+            ortaKapiGroup.add(galleryCorbel);
             const cap = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
-            cap.scale.set(2.6, 5.5, 2.6);
-            cap.position.set(-16, 15.7, 6 + dz);
-            topkapiGroup.add(cap);
+            cap.scale.set(3.2, 6.4, 3.2);
+            cap.position.set(0, 18.1, dz);
+            ortaKapiGroup.add(cap);
           });
+          topkapiGroup.add(ortaKapiGroup);
 
-          // Second Courtyard, Kubbealtı (Divan-ı Hümâyûn) & Tall Adalet Kulesi (Tower of Justice)
+          // --- SECOND COURTYARD (Divan Meydanı) Colonnaded Revaks (Porticoes) ---
+          for (let rx = -12; rx <= 8; rx += 3.3) {
+            [-13.5, 12.5].forEach((rz) => {
+              const col = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
+              col.scale.set(0.32, 4.2, 0.32);
+              col.position.set(rx, 2.1, rz);
+              topkapiGroup.add(col);
+              const rDome = createDomeWithFinial(1.3, 0.7, materials.leadDome);
+              rDome.position.set(rx, 4.4, rz + (rz > 0 ? 1.5 : -1.5));
+              topkapiGroup.add(rDome);
+            });
+          }
+
+          // --- KUBBEALTI (Divan-ı Hümâyûn Imperial Council Hall) ---
           const kubbealti = new THREE.Mesh(sharedGeos.box, materials.warmStone);
-          kubbealti.scale.set(12, 6.5, 8);
-          kubbealti.position.set(-4, 3.25, -8);
+          kubbealti.scale.set(13.5, 6.8, 8.5);
+          kubbealti.position.set(-4, 3.4, -8.5);
+          kubbealti.castShadow = true;
           topkapiGroup.add(kubbealti);
-          for (let dx = -3.5; dx <= 3.5; dx += 3.5) {
-            const kd = createDomeWithFinial(2.1, 0.85, materials.leadDome);
-            kd.position.set(-4 + dx, 6.5, -8);
+          // Decorative İznik Tile & Gold Eave overhang on Kubbealtı facade
+          const divanTileWall = new THREE.Mesh(sharedGeos.box, materials.iznikTile);
+          divanTileWall.scale.set(12.8, 3.2, 0.3);
+          divanTileWall.position.set(-4, 3.0, -4.15);
+          topkapiGroup.add(divanTileWall);
+          const divanEave = new THREE.Mesh(sharedGeos.box, materials.goldFinial);
+          divanEave.scale.set(14.5, 0.45, 2.6);
+          divanEave.position.set(-4, 5.8, -3.5);
+          topkapiGroup.add(divanEave);
+          for (let dx = -4.2; dx <= 4.2; dx += 4.2) {
+            const kd = createDomeWithFinial(2.35, 0.88, materials.leadDome);
+            kd.position.set(-4 + dx, 6.8, -8.5);
             topkapiGroup.add(kd);
           }
 
-          // Adalet Kulesi (Tower of Justice - prominent vertical spire)
-          const adaletShaft = new THREE.Mesh(sharedGeos.box, materials.limestone);
-          adaletShaft.scale.set(3.8, 22, 3.8);
-          adaletShaft.position.set(-4, 11, -12.5);
-          adaletShaft.castShadow = true;
-          topkapiGroup.add(adaletShaft);
-          const adaletLantern = new THREE.Mesh(sharedGeos.cylinder, materials.warmStone);
-          adaletLantern.scale.set(2.2, 5.5, 2.2);
-          adaletLantern.position.set(-4, 24.5, -12.5);
+          // --- ADALET KULESİ (Tower of Justice — Multi-Tiered Landmark Spire) ---
+          const adaletBase = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          adaletBase.scale.set(4.4, 15.0, 4.4);
+          adaletBase.position.set(-4, 7.5, -13.2);
+          adaletBase.castShadow = true;
+          topkapiGroup.add(adaletBase);
+          const adaletMid = new THREE.Mesh(sharedGeos.box, materials.warmStone);
+          adaletMid.scale.set(4.8, 7.5, 4.8);
+          adaletMid.position.set(-4, 18.5, -13.2);
+          topkapiGroup.add(adaletMid);
+          const adaletCornice = new THREE.Mesh(sharedGeos.box, materials.goldFinial);
+          adaletCornice.scale.set(5.4, 0.7, 5.4);
+          adaletCornice.position.set(-4, 22.4, -13.2);
+          topkapiGroup.add(adaletCornice);
+          const adaletLantern = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
+          adaletLantern.scale.set(2.5, 6.2, 2.5);
+          adaletLantern.position.set(-4, 25.8, -13.2);
           topkapiGroup.add(adaletLantern);
           const adaletCap = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
-          adaletCap.scale.set(2.5, 6.5, 2.5);
-          adaletCap.position.set(-4, 30.5, -12.5);
+          adaletCap.scale.set(2.9, 7.8, 2.9);
+          adaletCap.position.set(-4, 32.8, -13.2);
           topkapiGroup.add(adaletCap);
 
-          // Matbah-ı Âmire (Imperial Kitchens) with 10 Conical Domes & Chimneys on Marmara side
+          // --- DIŞ HAZİNE (Eight-Domed Outer Treasury beside Kubbealtı) ---
+          const disHazine = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          disHazine.scale.set(11.5, 6.0, 7.2);
+          disHazine.position.set(6.5, 3.0, -8.5);
+          topkapiGroup.add(disHazine);
+          [-3.8, -1.3, 1.3, 3.8].forEach((hdx) => {
+            [-1.6, 1.6].forEach((hdz) => {
+              const hd = createDomeWithFinial(1.35, 0.85, materials.leadDome);
+              hd.position.set(6.5 + hdx, 6.0, -8.5 + hdz);
+              topkapiGroup.add(hd);
+            });
+          });
+
+          // --- MATBAH-I ÂMİRE (Imperial Kitchens: 10 Domes + 10 Tall Conical Chimneys) ---
           const kitchens = new THREE.Mesh(sharedGeos.box, materials.limestone);
-          kitchens.scale.set(28, 6.0, 7.5);
-          kitchens.position.set(2, 3.0, 16);
+          kitchens.scale.set(30, 6.4, 8.2);
+          kitchens.position.set(1, 3.2, 17.5);
+          kitchens.castShadow = true;
           topkapiGroup.add(kitchens);
-          for (let dx = -11; dx <= 11; dx += 4.4) {
-            const cd = createDomeWithFinial(1.8, 1.1, materials.leadDome);
-            cd.position.set(2 + dx, 6.0, 16);
-            topkapiGroup.add(cd);
-            const chimney = new THREE.Mesh(sharedGeos.cone, materials.warmStone);
-            chimney.scale.set(0.9, 4.2, 0.9);
-            chimney.position.set(2 + dx, 7.5, 18.2);
-            topkapiGroup.add(chimney);
+          for (let i = 0; i < 10; i++) {
+            const dx = -12.6 + i * 2.8;
+            const kd = createDomeWithFinial(1.42, 0.92, materials.leadDome);
+            kd.position.set(1 + dx, 6.4, 15.6);
+            topkapiGroup.add(kd);
+            const chimneyBase = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
+            chimneyBase.scale.set(0.85, 3.2, 0.85);
+            chimneyBase.position.set(1 + dx, 7.6, 19.2);
+            topkapiGroup.add(chimneyBase);
+            const chimneyCone = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
+            chimneyCone.scale.set(0.95, 4.6, 0.95);
+            chimneyCone.position.set(1 + dx, 11.4, 19.2);
+            topkapiGroup.add(chimneyCone);
           }
 
-          // Harem Complex (Golden Horn side) & Third Courtyard (Arz Odası, Enderun)
+          // --- III. BÂBÜSSAÂDE (Gate of Felicity) & ARZ ODASI (Imperial Audience Chamber) ---
+          const babussaade = new THREE.Mesh(sharedGeos.box, materials.warmStone);
+          babussaade.scale.set(4.8, 7.6, 14.0);
+          babussaade.position.set(9.5, 3.8, 2.0);
+          topkapiGroup.add(babussaade);
+          const bsDome = createDomeWithFinial(3.1, 0.82, materials.leadDome);
+          bsDome.position.set(9.5, 7.6, 2.0);
+          topkapiGroup.add(bsDome);
+          const bsCanopy = new THREE.Mesh(sharedGeos.box, materials.goldFinial);
+          bsCanopy.scale.set(3.2, 0.4, 7.5);
+          bsCanopy.position.set(7.2, 5.8, 2.0);
+          topkapiGroup.add(bsCanopy);
+
+          // Arz Odası (Chamber of Petitions with Peripteral Marble Colonnade & Wide Eaves)
+          const arzPlinth = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          arzPlinth.scale.set(10.8, 1.2, 8.6);
+          arzPlinth.position.set(17.5, 0.6, 2.0);
+          topkapiGroup.add(arzPlinth);
+          const arzCore = new THREE.Mesh(sharedGeos.box, materials.iznikTile);
+          arzCore.scale.set(8.2, 5.2, 6.2);
+          arzCore.position.set(17.5, 3.8, 2.0);
+          topkapiGroup.add(arzCore);
+          for (let cx = -4.6; cx <= 4.6; cx += 2.3) {
+            [-3.6, 3.6].forEach((cz) => {
+              const col = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
+              col.scale.set(0.24, 4.8, 0.24);
+              col.position.set(17.5 + cx, 3.6, 2.0 + cz);
+              topkapiGroup.add(col);
+            });
+          }
+          const arzRoof = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
+          arzRoof.scale.set(7.4, 3.4, 5.8);
+          arzRoof.rotation.y = Math.PI / 4;
+          arzRoof.position.set(17.5, 7.8, 2.0);
+          topkapiGroup.add(arzRoof);
+
+          // --- HAREM-İ HÜMÂYÛN & HAS ODA (Privy Chamber / Sacred Relics) ---
           const harem = new THREE.Mesh(sharedGeos.box, materials.warmStone);
-          harem.scale.set(22, 7.5, 16);
-          harem.position.set(8, 3.75, -18);
+          harem.scale.set(24, 7.8, 16.5);
+          harem.position.set(10, 3.9, -18.5);
+          harem.castShadow = true;
           topkapiGroup.add(harem);
           [
-            [2, -16],
-            [8, -19],
-            [14, -15],
-            [10, -12],
-          ].forEach(([hx, hz]) => {
-            const hd = createDomeWithFinial(2.4, 0.85, materials.leadDome);
-            hd.position.set(hx, 7.5, hz);
+            [2, -16, 2.5],
+            [8, -19, 2.8],
+            [14, -15, 2.4],
+            [10, -12, 2.6],
+            [18, -18, 2.7],
+            [18, -12, 2.3],
+          ].forEach(([hx, hz, hr]) => {
+            const hd = createDomeWithFinial(hr, 0.88, materials.leadDome);
+            hd.position.set(hx, 7.8, hz);
             topkapiGroup.add(hd);
           });
 
-          // Arz Odası & Enderun Courtyards
-          const arzOdasi = new THREE.Mesh(sharedGeos.box, materials.iznikTile);
-          arzOdasi.scale.set(8, 5.5, 6);
-          arzOdasi.position.set(12, 2.75, 2);
-          topkapiGroup.add(arzOdasi);
-          const arzRoof = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
-          arzRoof.scale.set(6.2, 3.2, 6.2);
-          arzRoof.position.set(12, 7.1, 2);
-          topkapiGroup.add(arzRoof);
+          // --- FATİH KÖŞKÜ (Conqueror's Pavilion / Inner Treasury overlooking Marmara) ---
+          const fatihKosku = new THREE.Mesh(sharedGeos.box, materials.limestone);
+          fatihKosku.scale.set(9.5, 6.6, 14.5);
+          fatihKosku.position.set(28.5, 3.3, 8.5);
+          topkapiGroup.add(fatihKosku);
+          [-4.2, 0, 4.2].forEach((kdz) => {
+            const kd = createDomeWithFinial(2.3, 0.85, materials.leadDome);
+            kd.position.set(28.5, 6.6, 8.5 + kdz);
+            topkapiGroup.add(kd);
+          });
 
-          // Sur-ı Sultani (Palace Enclosure Walls around Sarayburnu)
+          // --- ÇİNİLİ KÖŞK (1472 Tiled Kiosk of Mehmed II in Outer Gardens) ---
+          const ciniliGroup = new THREE.Group();
+          ciniliGroup.position.set(-12, 0, -25.5);
+          const ciniliBody = new THREE.Mesh(sharedGeos.box, materials.iznikTile);
+          ciniliBody.scale.set(11.5, 6.2, 9.5);
+          ciniliBody.position.set(0, 3.1, 0);
+          ciniliGroup.add(ciniliBody);
+          const ciniliDome = createDomeWithFinial(3.2, 0.82, materials.leadDome);
+          ciniliDome.position.set(0, 6.2, 0);
+          ciniliGroup.add(ciniliDome);
+          topkapiGroup.add(ciniliGroup);
+
+          // --- SUR-I SULTANİ (Imperial Enclosure Walls & 12 Polygonal Bastion Towers) ---
           const surSegments = [
-            { x: -34, z: 0, w: 2.2, d: 52 },
-            { x: 0, z: 32, w: 68, d: 2.2 },
-            { x: 0, z: -34, w: 68, d: 2.2 },
-            { x: 36, z: 0, w: 2.2, d: 64 },
+            { x: -34, z: -6, w: 2.5, d: 52 },
+            { x: 2, z: 31, w: 72, d: 2.5 },
+            { x: 2, z: -33, w: 72, d: 2.5 },
+            { x: 37, z: -1, w: 2.5, d: 64 },
           ];
           surSegments.forEach((seg) => {
             const sw = new THREE.Mesh(sharedGeos.box, materials.limestone);
-            sw.scale.set(seg.w, 6.5, seg.d);
-            sw.position.set(seg.x, 3.25, seg.z);
+            sw.scale.set(seg.w, 7.2, seg.d);
+            sw.position.set(seg.x, 3.6, seg.z);
+            sw.castShadow = true;
             topkapiGroup.add(sw);
           });
 
-          registerLandmarkHitbox(topkapiGroup, 'topkapi-sarayi', 36, 32);
+          const surBastions = [
+            [-34, -33],
+            [-34, -12],
+            [-34, 8],
+            [-34, 31],
+            [-10, 31],
+            [14, 31],
+            [37, 31],
+            [37, 10],
+            [37, -12],
+            [37, -33],
+            [14, -33],
+            [-10, -33],
+          ];
+          surBastions.forEach(([bx, bz]) => {
+            const bt = new THREE.Mesh(sharedGeos.cylinder, materials.limestone);
+            bt.scale.set(2.4, 9.8, 2.4);
+            bt.position.set(bx, 4.9, bz);
+            topkapiGroup.add(bt);
+            const bCap = new THREE.Mesh(sharedGeos.cone, materials.leadDome);
+            bCap.scale.set(2.7, 3.8, 2.7);
+            bCap.position.set(bx, 11.7, bz);
+            topkapiGroup.add(bCap);
+          });
+
+          registerLandmarkHitbox(topkapiGroup, 'topkapi-sarayi', 38, 34);
           layerGroups.camiler.add(topkapiGroup);
         }
 
@@ -4468,8 +4793,25 @@
         walkCycle: 0,
         isMoving: false,
       };
+      const flyState = {
+        yaw: -0.35,
+        pitch: -0.25,
+        vertVel: 0,
+      };
       const joystickInput = { x: 0, y: 0, active: false };
       let waypointBeam = null;
+
+      function getSafeGroundHeight(x, z) {
+        if (state.insideInterior) return 650.5;
+        return Math.max(
+          0.8,
+          getPeninsulaElevation(x, z),
+          getPeninsulaElevation(x + 5, z),
+          getPeninsulaElevation(x - 5, z),
+          getPeninsulaElevation(x, z + 5),
+          getPeninsulaElevation(x, z - 5)
+        );
+      }
 
       // Interior Scene Group (placed at high altitude Y = 650 so transition is instant and clean)
       const interiorRoot = new THREE.Group();
@@ -5948,9 +6290,16 @@
         });
         const qBtn = document.getElementById('quick-toggle-labels-btn');
         if (qBtn) {
-          qBtn.textContent = nextVal ? '🏷 Harita Yazıları: Açık' : '🏷 Harita Yazıları: Kapalı';
+          qBtn.textContent = nextVal ? '🏷 İsimler: Açık' : '🏷 İsimler: Kapalı';
           qBtn.classList.toggle('active', !nextVal);
         }
+      }
+
+      function syncFlyAnglesFromCamera() {
+        const dir = new THREE.Vector3();
+        camera.getWorldDirection(dir);
+        flyState.pitch = THREE.MathUtils.clamp(Math.asin(THREE.MathUtils.clamp(dir.y, -0.95, 0.95)), -1.15, 1.15);
+        flyState.yaw = Math.atan2(dir.x, dir.z);
       }
 
       function setCameraMode(mode) {
@@ -5967,8 +6316,15 @@
         if (state.insideInterior && (mode === 'birdseye' || mode === 'orbit' || mode === 'fly')) {
           exitBuildingInterior();
         }
+
+        // Enable OrbitControls only in Orbit / Bird's-Eye; in Fly / 3rd-Person / Walk, direct touch look + joystick moves camera smoothly
+        controls.enabled = mode === 'orbit' || mode === 'birdseye';
+        if (controls.touches) {
+          controls.touches.ONE = mode === 'birdseye' ? THREE.TOUCH.PAN : THREE.TOUCH.ROTATE;
+          controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
+        }
+
         if (mode === 'birdseye') {
-          // High-altitude top-down Bird's-Eye view over the Historic Peninsula
           const cx = THREE.MathUtils.clamp(controls.target.x, -260, 280);
           const cz = THREE.MathUtils.clamp(controls.target.z, -90, 90);
           camTargetLook.set(cx, 12, cz);
@@ -5981,13 +6337,20 @@
             camTransitionActive = true;
           }
         } else if (mode === 'fly') {
-          if (camera.position.y < 30) {
-            camTargetLook.set(playerState.x - 40, 48, playerState.z - 25);
-            camTargetPos.set(playerState.x + 30, 68, playerState.z + 45);
-            camTransitionActive = true;
+          camTransitionActive = false;
+          const minGround = getSafeGroundHeight(camera.position.x, camera.position.z);
+          if (camera.position.y < minGround + 18) {
+            camera.position.y = minGround + 32;
           }
+          syncFlyAnglesFromCamera();
+          const lookDist = 45;
+          controls.target.set(
+            camera.position.x + Math.sin(flyState.yaw) * Math.cos(flyState.pitch) * lookDist,
+            camera.position.y + Math.sin(flyState.pitch) * lookDist,
+            camera.position.z + Math.cos(flyState.yaw) * Math.cos(flyState.pitch) * lookDist
+          );
         } else if (mode === 'third') {
-          playerState.y = Math.max(1.5, getPeninsulaElevation(playerState.x, playerState.z));
+          playerState.y = Math.max(1.5, getSafeGroundHeight(playerState.x, playerState.z));
           if (playerGroup) {
             playerGroup.position.set(playerState.x, playerState.y, playerState.z);
           }
@@ -5995,10 +6358,10 @@
         } else if (mode === 'walk') {
           const gx = playerState.x;
           const gz = playerState.z;
-          const gy = Math.max(2, getPeninsulaElevation(gx, gz));
+          const gy = Math.max(2, getSafeGroundHeight(gx, gz));
           camTargetPos.set(gx, gy + 2.1, gz);
           camTargetLook.set(gx - 15, gy + 2.1, gz - 8);
-          camTransitionActive = true;
+          camTransitionActive = false;
         }
       }
 
@@ -6393,15 +6756,29 @@
           setMinimapClosed(!state.minimapClosed);
         });
 
-        // Restore saved panel open/close preferences from session if present
+        // Restore saved panel open/close preferences or auto-simplify on mobile/APK screens
         try {
-          if (localStorage.getItem('fatih_title_banner_closed') === '1') {
+          const isMobileViewport = window.innerWidth <= 950;
+          if (localStorage.getItem('fatih_title_banner_closed') === '1' || isMobileViewport) {
             setTitleBannerClosed(true);
           }
-          if (localStorage.getItem('fatih_minimap_closed') === '1') {
+          if (localStorage.getItem('fatih_minimap_closed') === '1' || isMobileViewport) {
             setMinimapClosed(true);
           }
+          if (isMobileViewport) {
+            const wrapper = document.getElementById('bottom-dock-wrapper');
+            if (wrapper && !wrapper.classList.contains('collapsed')) {
+              toggleDockCollapsed();
+            }
+          }
         } catch {}
+
+        const closeQuestHudBtn = document.getElementById('close-quest-hud-btn');
+        if (closeQuestHudBtn) {
+          closeQuestHudBtn.addEventListener('click', () => {
+            document.getElementById('openworld-hud').classList.add('panel-closed');
+          });
+        }
 
         // Open-World HUD & NPC Modal Controls
         document.getElementById('cycle-quest-btn').addEventListener('click', () => {
@@ -6493,20 +6870,41 @@
 
         document.getElementById('cam-rot-left-btn').addEventListener('click', () => {
           playerState.camYaw += 0.35;
+          flyState.yaw += 0.35;
         });
         document.getElementById('cam-rot-right-btn').addEventListener('click', () => {
           playerState.camYaw -= 0.35;
+          flyState.yaw -= 0.35;
+        });
+        document.getElementById('cam-up-btn').addEventListener('click', () => {
+          camera.position.y = Math.min(620, camera.position.y + 14);
+          controls.target.y = Math.min(600, controls.target.y + 14);
+        });
+        document.getElementById('cam-down-btn').addEventListener('click', () => {
+          const minG = getSafeGroundHeight(camera.position.x, camera.position.z);
+          camera.position.y = Math.max(minG + 3.0, camera.position.y - 14);
+          controls.target.y = Math.max(minG + 1.5, controls.target.y - 14);
         });
         document.getElementById('cam-zoom-in-btn').addEventListener('click', () => {
-          playerState.camDist = Math.max(5, playerState.camDist - 2.5);
-          camera.position.lerp(controls.target, 0.15);
+          if (state.camMode === 'fly') {
+            camera.getWorldDirection(_forward);
+            camera.position.addScaledVector(_forward, 18);
+          } else {
+            playerState.camDist = Math.max(5, playerState.camDist - 2.5);
+            camera.position.lerp(controls.target, 0.18);
+          }
         });
         document.getElementById('cam-zoom-out-btn').addEventListener('click', () => {
-          playerState.camDist = Math.min(32, playerState.camDist + 2.5);
+          if (state.camMode === 'fly') {
+            camera.getWorldDirection(_forward);
+            camera.position.addScaledVector(_forward, -18);
+          } else {
+            playerState.camDist = Math.min(32, playerState.camDist + 2.5);
+          }
         });
         document.getElementById('player-sprint-btn').addEventListener('click', (e) => {
           playerState.sprinting = !playerState.sprinting;
-          e.currentTarget.textContent = playerState.sprinting ? '🏃 Koş: Açık' : '🏃 Koş';
+          e.currentTarget.textContent = playerState.sprinting ? '🏃 Hızlı: Açık' : '🏃 Hızlı';
         });
 
         // Bottom Dock Tabs
@@ -6679,15 +7077,57 @@
           .getElementById('quick-audio-btn')
           .addEventListener('click', toggleProceduralAudio);
 
-        // 3D Landmark Click Raycasting
+        // 3D Landmark Click Raycasting + Direct Touch / Drag Look for Free-Fly, 3rd-Person & Walk Modes
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let downPos = { x: 0, y: 0 };
+        let lookPointerId = null;
+        let lastLookX = 0;
+        let lastLookY = 0;
+
         renderer.domElement.addEventListener('pointerdown', (e) => {
           downPos.x = e.clientX;
           downPos.y = e.clientY;
+          if (state.camMode === 'fly' || state.camMode === 'third' || state.camMode === 'walk') {
+            lookPointerId = e.pointerId;
+            lastLookX = e.clientX;
+            lastLookY = e.clientY;
+            try {
+              renderer.domElement.setPointerCapture(e.pointerId);
+            } catch {}
+          }
         });
+
+        renderer.domElement.addEventListener('pointermove', (e) => {
+          if (lookPointerId !== e.pointerId) return;
+          const dx = e.clientX - lastLookX;
+          const dy = e.clientY - lastLookY;
+          lastLookX = e.clientX;
+          lastLookY = e.clientY;
+          const sensitivity = 0.0045;
+          if (state.camMode === 'fly') {
+            camTransitionActive = false;
+            flyState.yaw -= dx * sensitivity;
+            flyState.pitch = THREE.MathUtils.clamp(flyState.pitch - dy * sensitivity, -1.2, 1.15);
+          } else if (state.camMode === 'third' || state.camMode === 'walk') {
+            playerState.camYaw -= dx * sensitivity;
+            playerState.camPitch = THREE.MathUtils.clamp(
+              playerState.camPitch + dy * sensitivity,
+              0.08,
+              1.15
+            );
+          }
+        });
+
+        const endLookDrag = (e) => {
+          if (lookPointerId === e.pointerId) {
+            lookPointerId = null;
+          }
+        };
+        renderer.domElement.addEventListener('pointercancel', endLookDrag);
+
         renderer.domElement.addEventListener('pointerup', (e) => {
+          endLookDrag(e);
           if (Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) > 6) return;
           mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
           mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -6826,7 +7266,7 @@
               playerState.walkCycle += dt * (playerState.sprinting ? 12 : 8);
             }
 
-            playerState.y = Math.max(1.2, getPeninsulaElevation(playerState.x, playerState.z));
+            playerState.y = Math.max(1.2, getSafeGroundHeight(playerState.x, playerState.z));
             if (playerGroup) {
               playerGroup.visible = state.camMode === 'third';
               playerGroup.position.set(playerState.x, playerState.y, playerState.z);
@@ -6847,7 +7287,6 @@
                 playerState.x + Math.sin(playerState.camYaw) * Math.cos(playerState.camPitch) * effDist;
               const desZ =
                 playerState.z + Math.cos(playerState.camYaw) * Math.cos(playerState.camPitch) * effDist;
-              // Camera wall collision check: pull camera closer if inside a building collider
               for (let c = 0; c < buildingColliders.length; c++) {
                 const col = buildingColliders[c];
                 if (Math.hypot(desX - col.x, desZ - col.z) < col.r) {
@@ -6859,29 +7298,73 @@
                 playerState.x + Math.sin(playerState.camYaw) * Math.cos(playerState.camPitch) * effDist;
               const camZ =
                 playerState.z + Math.cos(playerState.camYaw) * Math.cos(playerState.camPitch) * effDist;
-              const groundAtCam = Math.max(1.5, getPeninsulaElevation(camX, camZ));
+              const groundAtCam = getSafeGroundHeight(camX, camZ);
               const camY = Math.max(
-                groundAtCam + 2.0,
+                groundAtCam + 2.8,
                 playerState.y + Math.sin(playerState.camPitch) * effDist + 2.2
               );
-              camera.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.22);
+              camera.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.25);
               controls.target.lerp(
                 new THREE.Vector3(playerState.x, playerState.y + 1.8, playerState.z),
-                0.28
+                0.32
               );
+              camera.lookAt(controls.target);
             } else if (state.camMode === 'walk' && !camTransitionActive) {
-              camera.position.set(playerState.x, playerState.y + 2.1, playerState.z);
+              const eyeY = playerState.y + 2.2;
+              camera.position.set(playerState.x, eyeY, playerState.z);
               controls.target.set(
-                playerState.x - Math.sin(playerState.camYaw) * 10,
-                playerState.y + 2.0,
-                playerState.z - Math.cos(playerState.camYaw) * 10
+                playerState.x - Math.sin(playerState.camYaw) * Math.cos(playerState.camPitch * 0.5) * 12,
+                eyeY + (0.35 - playerState.camPitch) * 6,
+                playerState.z - Math.cos(playerState.camYaw) * Math.cos(playerState.camPitch * 0.5) * 12
               );
+              camera.lookAt(controls.target);
+            }
+          } else if (state.camMode === 'fly') {
+            // Free-Fly 3D Camera (Touch Drag Look + Virtual Joystick / WASD 3D Flight)
+            if (camTransitionActive) {
+              syncFlyAnglesFromCamera();
+            } else {
+              const flySpeed = (playerState.sprinting || pressedKeys.has('ShiftLeft') ? 145 : 88) * dt;
+              const dirX = Math.sin(flyState.yaw) * Math.cos(flyState.pitch);
+              const dirY = Math.sin(flyState.pitch);
+              const dirZ = Math.cos(flyState.yaw) * Math.cos(flyState.pitch);
+              _forward.set(dirX, dirY, dirZ).normalize();
+              _right.set(-dirZ, 0, dirX).normalize();
+
+              if (hasMoveInput) {
+                camera.position.addScaledVector(_forward, -moveInY * flySpeed);
+                camera.position.addScaledVector(_right, moveInX * flySpeed);
+              }
+              if (pressedKeys.has('KeyQ') || pressedKeys.has('Space')) {
+                camera.position.y += 55 * dt;
+              }
+              if (pressedKeys.has('KeyZ') || pressedKeys.has('KeyC')) {
+                camera.position.y -= 55 * dt;
+              }
+
+              camera.position.x = THREE.MathUtils.clamp(camera.position.x, -680, 620);
+              camera.position.z = THREE.MathUtils.clamp(camera.position.z, -480, 520);
+              const minFlyGround = getSafeGroundHeight(camera.position.x, camera.position.z);
+              if (camera.position.y < minFlyGround + 3.0) {
+                camera.position.y = minFlyGround + 3.0;
+              }
+
+              const lookDist = 45;
+              controls.target.set(
+                camera.position.x + dirX * lookDist,
+                camera.position.y + dirY * lookDist,
+                camera.position.z + dirZ * lookDist
+              );
+              camera.lookAt(controls.target);
+              playerState.x = THREE.MathUtils.clamp(camera.position.x, -460, 420);
+              playerState.z = THREE.MathUtils.clamp(camera.position.z, -200, 240);
             }
           } else if (hasMoveInput) {
-            // Orbit / Free-Fly WASD or Joystick movement
-            const moveSpeed = 88 * dt;
+            // Orbit / Bird's-Eye WASD or Joystick movement
+            const moveSpeed = (playerState.sprinting ? 145 : 88) * dt;
             camera.getWorldDirection(_forward);
             _forward.y = 0;
+            if (_forward.lengthSq() < 0.001) _forward.set(0, 0, -1);
             _forward.normalize();
             _right.crossVectors(_forward, camera.up).normalize();
             camera.position.addScaledVector(_forward, -moveInY * moveSpeed);
@@ -6893,7 +7376,21 @@
           }
         }
 
-        controls.update();
+        if (controls.enabled) {
+          controls.update();
+        }
+
+        // Universal Anti-Underground Safety Clamp (Prevents camera & target from ever going below terrain or sea)
+        if (!state.insideInterior) {
+          const minCamY = getSafeGroundHeight(camera.position.x, camera.position.z) + 2.8;
+          if (camera.position.y < minCamY) {
+            camera.position.y = minCamY;
+          }
+          const minTargetY = getSafeGroundHeight(controls.target.x, controls.target.z) + 1.2;
+          if (controls.target.y < minTargetY && state.camMode !== 'fly') {
+            controls.target.y = minTargetY;
+          }
+        }
 
         // Update Active Historical Region Indicator & Proximity Prompts
         const refX = state.camMode === 'third' ? playerState.x : controls.target.x;
@@ -6971,11 +7468,13 @@
           }
         }
 
-        // Show/Update Proximity NPC & Building Entry Buttons
+        // Show/Update Proximity NPC & Building Entry Buttons (Only when at street level / close altitude)
+        const isLowAltitudeOrStreet =
+          state.camMode === 'third' || state.camMode === 'walk' || camera.position.y < 68;
         const npcModalOpen = !document.getElementById('npc-modal').classList.contains('hidden');
         const npcPromptBtn = document.getElementById('npc-interact-prompt-btn');
         if (npcPromptBtn) {
-          if (!state.insideInterior && !npcModalOpen && bestNpcDist < 55) {
+          if (!state.insideInterior && !npcModalOpen && isLowAltitudeOrStreet && bestNpcDist < 42) {
             npcPromptBtn.classList.remove('hidden');
             npcPromptBtn.textContent = `💬 [E] ${nearestNpcCandidate.name} ile Etkileşime Geç`;
           } else {
@@ -6994,7 +7493,13 @@
         }
         const enterBtn = document.getElementById('enter-interior-btn');
         if (enterBtn) {
-          if (!state.insideInterior && !npcModalOpen && bestLmDist < 65 && nearestInteriorLandmark) {
+          if (
+            !state.insideInterior &&
+            !npcModalOpen &&
+            isLowAltitudeOrStreet &&
+            bestLmDist < 52 &&
+            nearestInteriorLandmark
+          ) {
             enterBtn.classList.remove('hidden');
             enterBtn.textContent = `🚪 [F] İçeri Gir: ${nearestInteriorLandmark.name}`;
           } else {
